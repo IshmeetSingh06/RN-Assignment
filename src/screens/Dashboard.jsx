@@ -8,7 +8,7 @@ import { MagnifyingGlassIcon } from 'react-native-heroicons/outline';
 import MovieList from '../components/MovieList';
 import Loading from '../components/Loading';
 
-import { fetchTrendingMovies, fetchUpcomingMovies } from '../apis/movies';
+import { fetchMoviesByGenre, fetchTrendingMovies, fetchUpcomingMovies } from '../apis/movies';
 
 import { getUserData } from '../utils/UserData';
 
@@ -76,6 +76,7 @@ const Dashboard = () => {
   const [upcoming, setUpcoming] = useState([]);
   const [topRated, setTopRated] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [recommended, setRecommended] = useState([]);
 
   const navigation = useNavigation();
 
@@ -94,6 +95,7 @@ const Dashboard = () => {
 
         getUpcomingMovies();
         getTopRatedMovies();
+        getYourRecommendations();
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -111,6 +113,13 @@ const Dashboard = () => {
   const getTopRatedMovies = async () => {
     const data = await fetchTrendingMovies()
     if (data && data.results) setTopRated(data.results)
+    setLoading(false)
+  }
+
+  const getYourRecommendations = async () => {
+    const genreIds = selectedGenres.map(genre => genre.id);
+    const data = await fetchMoviesByGenre(genreIds)
+    if (data && data.results) setRecommended(data.results)
     setLoading(false)
   }
 
@@ -139,6 +148,7 @@ const Dashboard = () => {
         <Loading />
       ) : (
         <ScrollViewContainer showsVerticalScrollIndicator={false}>
+          <MovieList title="Recommendations" data={recommended} />
           <MovieList title="Upcoming" data={upcoming} />
           <MovieList title="Top Rated" data={topRated} />
         </ScrollViewContainer>

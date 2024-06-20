@@ -4,6 +4,7 @@ import axiosApiInstance from '../utils/AxiosConfig';
 const trendingMoviesEndpoint = `/trending/movie/day`;
 const upcomingMoviesEndpoint = `/movie/upcoming`;
 const topRatedMoviesEndpoint = `/movie/top_rated`;
+const discoverMoviesEndpoint = `/discover/movie`;
 
 // Dynamic endpoints
 const movieDetailsEndpoint = (id) => `/movie/${id}`;
@@ -47,6 +48,12 @@ export const fetchTopRatedMovies = () => apiCall(topRatedMoviesEndpoint);
 export const fetchMovieDetails = (id) => apiCall(movieDetailsEndpoint(id));
 export const fetchMovieCredits = (id) => apiCall(movieCreditsEndpoint(id));
 export const fetchSimilarMovies = (id) => apiCall(movieSimilarEndpoint(id));
+export const fetchMoviesByGenre = (genreIds) => {
+    const params = {
+        with_genres: genreIds.join(','),
+    };
+    return apiCall(discoverMoviesEndpoint, params);
+};
 
 // Fetch functions for person endpoints
 export const fetchPersonDetails = (id) => apiCall(personDetailEndpoint(id));

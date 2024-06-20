@@ -136,11 +136,11 @@ const Movie = () => {
       <Header>
         <View>
           <MovieImage source={{ uri: image500(movie?.poster_path) }} />
-          <GradientOverlay
+          {/* <GradientOverlay
             colors={['transparent', 'rgba(23, 23, 23, 0.8)', 'rgba(23, 23, 23, 1)', 'black']}
             start={{ x: 0.5, y: 0 }}
             end={{ x: 0.5, y: 1 }}
-          />
+          /> */}
         </View>
 
         <HeaderTop>

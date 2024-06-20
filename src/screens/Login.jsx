@@ -39,7 +39,7 @@ const ButtonContainer = styled.View`
 `;
 
 const StyledButton = styled.TouchableOpacity`
-  background-color: #ff6600;
+  background-color: #007AFF;
   padding: 12px;
   align-items: center;
   border-radius: 4px;
@@ -84,9 +84,10 @@ const GenreItem = styled.TouchableOpacity`
   flex: 1;
   padding: 10px;
   margin: 5px;
-  background-color: ${(props) => (props.selected ? '#d3d3d3' : '#fff')};
+  background-color: ${(props) => (props.selected ? '#007AFF' : props.disabled ? '#d3d3d3' : '#fff')};
   border-radius: 5px;
   align-items: center;
+  opacity: ${(props) => (props.disabled ? 1 : 1)};
 `;
 
 const Login = () => {
@@ -110,11 +111,14 @@ const Login = () => {
   }, []);
 
   const handleGenreSelect = (genre) => {
-    setSelectedGenres((prevGenres) =>
-      prevGenres.some((g) => g.id === genre.id)
-        ? prevGenres.filter((g) => g.id !== genre.id)
-        : [...prevGenres, genre]
-    );
+    setSelectedGenres((prevGenres) => {
+      if (prevGenres.some((g) => g.id === genre.id)) {
+        return prevGenres.filter((g) => g.id !== genre.id);
+      } else if (prevGenres.length < 5) {
+        return [...prevGenres, genre];
+      }
+      return prevGenres;
+    });
   };
 
   const handleLogin = async () => {
@@ -173,8 +177,13 @@ const Login = () => {
               <GenreItem
                 selected={selectedGenres.some((g) => g.id === item.id)}
                 onPress={() => handleGenreSelect(item)}
+                disabled={!selectedGenres.some((g) => g.id === item.id) && selectedGenres.length >= 5}
               >
-                <Text>{item.name}</Text>
+                <Text style={{
+                  color: selectedGenres.some((g) => g.id === item.id) || (!selectedGenres.some((g) => g.id === item.id) && selectedGenres.length >= 5)
+                    ? '#fff'
+                    : '#000',
+                }}>{item.name}</Text>
               </GenreItem>
             )}
             ListEmptyComponent={<Text>No genres available</Text>}
